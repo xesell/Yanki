@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 0635a3487e9fac94b9c867bafef202fa
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - layer_pink: {fileID: 21300000, guid: b6927af9b6ecdc340b81c651345557de, type: 3}
+  - layer_white: {fileID: 21300000, guid: c0239ea7cfceba34dba98ed8a0bcfe01, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
