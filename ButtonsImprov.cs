@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class ButtonsImprov : MonoBehaviour
 {
-    public Sprite layer_white, layer_purple;
     private GameObject Home;
     public GameObject ImLost;
     private bool bay = false;
+    private int lvl=0;
+    public Sprite onelvl, twolvl, treelvl;
 
     void Start()
     {
@@ -22,77 +23,78 @@ public class ButtonsImprov : MonoBehaviour
     }
     private void OnMouseDown()
     {
-        GetComponent<SpriteRenderer>().sprite = layer_purple;
     }
     private void OnMouseUp()
     {
-        GetComponent<SpriteRenderer>().sprite = layer_white;
     }
     private void OnMouseUpAsButton()
-    {
-        GetComponent<SpriteRenderer>().sprite = layer_white;
-       
+    {       
         switch (gameObject.name) {
             case ("Back"):
                 ImLost.SetActive(false);
                 break;
-            case ("YankiFood+One"):
-                if (!bay && Home.GetComponent<Home>().Food>=5)
+            case ("YankiFood+"):
+                if (lvl == 0 && Home.GetComponent<Home>().Food >= 10)
                 {
-                    bay = true;
-                    Home.GetComponent<Home>().Food = Home.GetComponent<Home>().Food - 5;
-                    Debug.Log("Food+");
+                    Home.GetComponent<Home>().Food = Home.GetComponent<Home>().Food - 10;
                     Home.GetComponent<Home>().YankiFood = 2;
+                    lvl++;
+
                 }
-                break;
-            case ("YankiFood+Two"):
-                if (!bay) { 
+                else if (lvl == 1 && Home.GetComponent<Home>().Wood >= 20) {
+                    Home.GetComponent<Home>().Wood = Home.GetComponent<Home>().Wood - 20;
                     Home.GetComponent<Home>().YankiFood = 5;
-                    bay = true;
+                    lvl++;
                 }
-                break;
-            case ("YankiFood+Three"):
-                if (!bay) { 
+                else if (lvl == 2 && Home.GetComponent<Home>().Mine >= 50) {
+                    Home.GetComponent<Home>().Mine = Home.GetComponent<Home>().Mine - 50;
                     Home.GetComponent<Home>().YankiFood = 10;
                     bay = true;
                 }
-                break;
-            case ("YankiWood+One"):
-                if (!bay) { 
+                    break;
+            case ("YankiWood+"):
+                if (lvl == 0 && Home.GetComponent<Home>().Food >= 50)
+                {
+                    Home.GetComponent<Home>().Food = Home.GetComponent<Home>().Food - 50;
                     Home.GetComponent<Home>().YankiWood = 2;
-                    bay = true;
+                    lvl++;
+
                 }
-                break;
-            case ("YankiWood+Two"):
-                if (!bay) { 
+                else if (lvl == 1 && Home.GetComponent<Home>().Mine >= 30)
+                {
+                    Home.GetComponent<Home>().Mine = Home.GetComponent<Home>().Mine - 30;
                     Home.GetComponent<Home>().YankiWood = 5;
-                    bay = true;
+                    lvl++;
                 }
-                break;
-            case ("YankiWood+Three"):
-                if (!bay) { 
+                else if (lvl == 2 && Home.GetComponent<Home>().Food >= 250)
+                {
+                    Home.GetComponent<Home>().Food = Home.GetComponent<Home>().Food - 250;
                     Home.GetComponent<Home>().YankiWood = 10;
                     bay = true;
                 }
                 break;
-            case ("YankiMine+One"):
-                if (!bay) {
-                    Home.GetComponent<Home>().YankiWood = 2;
+            case ("YankiMine+"):
+                if (lvl == 0 && Home.GetComponent<Home>().Wood >= 50)
+                {
+                    Home.GetComponent<Home>().Wood = Home.GetComponent<Home>().Wood - 50;
+                    Home.GetComponent<Home>().YankiMine = 2;
+                    lvl++;
+
+                }
+                else if (lvl == 1 && Home.GetComponent<Home>().Food >= 250)
+                {
+                    Home.GetComponent<Home>().Food = Home.GetComponent<Home>().Food - 250;
+                    Home.GetComponent<Home>().YankiMine = 5;
+                    lvl++;
+                }
+                else if (lvl == 2 && Home.GetComponent<Home>().Wood >= 400)
+                {
+                    Home.GetComponent<Home>().Wood = Home.GetComponent<Home>().Wood - 400;
+                    Home.GetComponent<Home>().YankiMine = 10;
                     bay = true;
                 }
                 break;
-            case ("YankiMine+Two"):
-                if (!bay) { 
-                    Home.GetComponent<Home>().YankiWood = 5;
-                    bay = true;
-                }
-                break;
-            case ("YankiMine+Three"):
-                if (!bay) { 
-                    Home.GetComponent<Home>().YankiWood = 10;
-                    bay = true;
-                }
-                break;
+         
         }
     }
 }

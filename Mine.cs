@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tree : MonoBehaviour
+public class Mine : MonoBehaviour
 {
     public Sprite spOne, spTwo, spThree;
     private int Rand;
@@ -13,7 +13,7 @@ public class Tree : MonoBehaviour
     {
         RandSprite();
         GetComponent<Renderer>().sortingOrder = -(int)transform.position.y;
-        countRes = 3;
+        countRes = 4;
         life = true;
     }
 
@@ -34,12 +34,11 @@ public class Tree : MonoBehaviour
 
     }
     public bool ResUse() {
+       
+        countRes = countRes - 2;
+        if (countRes <= 0) return false;
 
-        countRes = countRes - 1;
-        if (countRes <= 0)   return false;
-        
         return true;
-
     }
         
 }

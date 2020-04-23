@@ -7,42 +7,120 @@ public class Yanki : MonoBehaviour
     public float speed;
     private GameObject Home; 
     private Vector3 target;
-    private GameObject[] Trees;
+    private GameObject[] ResArray;
     private Vector3 targetGo;
 
-    private int numberTree;
+    private int numberRes;
 
-    int food, wood, mine;
+    private bool inHome;
+
+    public Sprite YankiWood, YankiMine;
+    public enum View { 
+    YankiFood,
+    YankiWood,
+    YankiMine
+    }
+    public View ViewYanki;
+
 
     void Start()
     {
         Home = GameObject.Find("Home");
-        ResSelect();
-    }
-
+        ViewYanki = Home.GetComponent<Home>().RandomYankiView();
+        if (ViewYanki == View.YankiFood)
+        {
+            ResSelectTree(true);
+        }
+        else if (ViewYanki == View.YankiWood) 
+        {
+            GetComponent<SpriteRenderer>().sprite = YankiWood;
+            ResSelectTree(true);
+        }
+        else if (ViewYanki == View.YankiMine)
+        {
+            GetComponent<SpriteRenderer>().sprite = YankiMine;
+            ResSelectMine(true);
+        }
    
+    }
     void Update()
     {
-        ResourceGathering();
+        if (ViewYanki == View.YankiFood || ViewYanki == View.YankiWood)
+        {
+            ResourceGatheringTree();
+            YankiDestroyResDebag();
+        }
+        else if (ViewYanki == View.YankiMine) {
+            ResourceGatheringMine();
+            YankiDestroyResDebag();
+        }
         
     }
-    void ResourceGathering() {
+    void ResourceGatheringTree() {
     transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * speed);
     if (transform.position == target && target == targetGo)
     {
+            if (!ResArray[numberRes].GetComponent<Tree>().ResUse())
+            {
+                Destroy(ResArray[numberRes]);
+            }
         target = Home.transform.position;
+            inHome = true;
     }
     else if (transform.position == target && target == Home.transform.position)
     {
-        ResSelect();
+        ResSelectTree(false);
+            inHome = false;
     }
     }
-    void ResSelect() {
-        Trees = Home.GetComponent<Home>().Trees;
-        numberTree = Random.Range(0, Trees.Length);
-        targetGo = Trees[numberTree].transform.position;
+    void ResSelectTree(bool start) {
+        ResArray = Home.GetComponent<Home>().Trees;
+        numberRes = Random.Range(0, ResArray.Length);
+        targetGo = ResArray[numberRes].transform.position;
         target = targetGo;
-        Home.GetComponent<Home>().Food = Home.GetComponent<Home>().Food + Home.GetComponent<Home>().YankiFood;
-        
+        if (!start)
+            if (ViewYanki == View.YankiFood)
+            Home.GetComponent<Home>().Food = Home.GetComponent<Home>().Food + Home.GetComponent<Home>().YankiFood;
+         else if(ViewYanki == View.YankiWood)
+            Home.GetComponent<Home>().Wood = Home.GetComponent<Home>().Wood + Home.GetComponent<Home>().YankiWood;
     }
+
+    void YankiDestroyResDebag() {
+        if (targetGo != ResArray[numberRes].transform.position && !inHome) {
+            if (ViewYanki == View.YankiFood || ViewYanki == View.YankiWood)
+                ResSelectTree(false);
+            else if (ViewYanki == View.YankiMine)
+                ResSelectMine(false);
+        }
+    }
+
+    void ResourceGatheringMine()
+    {
+        transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * speed);
+        if (transform.position == target && target == targetGo)
+        {
+            if (!ResArray[numberRes].GetComponent<Mine>().ResUse())
+            {
+                Destroy(ResArray[numberRes]);
+            }
+            target = Home.transform.position;
+            inHome = true;
+        }
+        else if (transform.position == target && target == Home.transform.position)
+        {
+            ResSelectMine(false);
+            inHome = false;
+        }
+    }
+    void ResSelectMine(bool start)
+    {
+        ResArray = Home.GetComponent<Home>().Mines;
+        numberRes = Random.Range(0, ResArray.Length);
+        targetGo = ResArray[numberRes].transform.position;
+        target = targetGo;
+        if (!start)
+           Home.GetComponent<Home>().Mine = Home.GetComponent<Home>().Mine + Home.GetComponent<Home>().YankiMine;
+    }
+
+
 }
